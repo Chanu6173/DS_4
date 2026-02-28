@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Registry Lookup</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        #status { font-weight: bold; margin-top: 10px; }
+        .valid { color: green; }
+        .invalid { color: red; }
+    </style>
+</head>
+<body>
+
+    <h2>Product Validator</h2>
+    <input type="text" id="productId" placeholder="Enter Product ID">
+    <button onclick="runCheck()">Check Product</button>
+    <div id="status"></div>
+
+    <script>
+        // No import needed! ethers is global because of the script tag above.
+
+        const contractAddress = "0xd0Ce7A438998460C74262E3524481fD7744a2462";
+        const rpcUrl = "https://lava.polygon.build"; 
+
+        // Human-Readable ABI (Standard for Ethers.js)
+        const abi = [
+            "function validateProduct(uint256 _productId) public view returns (bool)"
+        ];
+
+        async function checkProduct(id) {
+            const display = document.getElementById("status");
+            display.innerHTML = "Checking...";
+            display.className = "";
+
+            try {
+                // Connect to Polygon
+                const provider = new ethers.JsonRpcProvider(rpcUrl);
+
+                // Create Contract Instance
+                const contract = new ethers.Contract(contractAddress, abi, provider);
+
+                // Execute the call
+                console.log(`Checking product ID: ${id}...`);
+                const isValid = await contract.validateProduct(id);
+
+                if (isValid) {
+                    display.innerHTML = "✅ Valid Product: Registered";
+                    display.className = "valid";
+                } else {
+                    display.innerHTML = "❌ Invalid Product: Not Found";
+                    display.className = "invalid";
+                }
+                
+            } catch (error) {
+                console.error("Connection Error:", error);
+                display.innerHTML = "Error connecting to network.";
+            }
+        }
+
+        // Trigger function for the button
+        function runCheck() {
+            const val = document.getElementById("productId").value;
+            if (val) checkProduct(val);
+        }
+    </script>
+</body>
+</html>
