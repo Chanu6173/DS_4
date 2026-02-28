@@ -14,14 +14,15 @@
 </head>
 <body>
 
-    <h2>Product Version-3.0</h2>
+    <h2>Product Version-4.0</h2>
     <input type="text" id="productId" placeholder="Enter Product ID">
     <button onclick="runCheck()">Check Product</button>
     <div id="status"></div>
 
     <script>
         // No import needed! ethers is global because of the script tag above.
-
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('validate');
         const contractAddress = "0xd0Ce7A438998460C74262E3524481fD7744a2462";
         const rpcUrl = "https://dawn-wispy-model.matic.quiknode.pro/07c6b7dcc65b7994ff14a4896b47c01dfd4ff6c8/"; 
 
