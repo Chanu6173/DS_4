@@ -67,6 +67,18 @@
             const val = document.getElementById("productId").value;
             if (val) checkProduct(val);
         }
+        async function init() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const idFromUrl = urlParams.get('validate');
+
+    if (idFromUrl) {
+        // Call your existing smart contract function
+        await checkProduct(idFromUrl);
+    }
+}
+
+// Run the check when the page loads
+window.onload = init;
     </script>
 </body>
 </html>
